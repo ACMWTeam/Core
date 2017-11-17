@@ -20,6 +20,6 @@ public class ACMWPlayer implements ACMWAccount, ACMWEntity<Player>{
 	@Override
 	public Player getEntity() {
 		return player;
-	};
+	}
 	
 }

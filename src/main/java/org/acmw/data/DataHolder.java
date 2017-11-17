@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.acmw.exception.InvalidCreateParameters;
+import org.bukkit.configuration.ConfigurationSection;
 
 public interface DataHolder {
 
@@ -24,11 +25,27 @@ public interface DataHolder {
 		return (Optional<T>)getData().stream().filter(d -> type.isInstance(d)).findFirst();
 	}
 	
-	public default <H extends DataHolder, T extends CustomData<H>> T createData(Class<T> type, H holder, Object... parameters) throws InvalidCreateParameters {
+	@SuppressWarnings("unchecked")
+	public default <H extends DataHolder, T extends CustomData<H>> CustomData<H> createData(Class<T> type, H holder, Object... parameters) throws InvalidCreateParameters {
 		try {
 			T crea = type.newInstance();
 			crea.onCreation(holder, parameters);
+			addData(crea);
 			return crea;
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public default <H extends DataHolder, T extends SerializableData<? extends DataHolder>> SerializableData<H> loadData(Class<T> type, H holder, ConfigurationSection section) {
+		try {
+			T data = type.newInstance();
+			SerializableData<H> serial = (SerializableData<H>) data.clone(holder);
+			serial.onLoad(section);
+			addData(serial);
+			return serial;
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
