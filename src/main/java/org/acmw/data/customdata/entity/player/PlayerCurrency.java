@@ -1,8 +1,10 @@
 package org.acmw.data.customdata.entity.player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.acmw.CorePlugin;
 import org.acmw.data.CustomData;
@@ -14,6 +16,9 @@ import org.acmw.exception.InvalidCreateParameters;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.milkbowl.vault.economy.EconomyResponse;
+import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
+
 public class PlayerCurrency implements SerializableData<ACMWAccount>{
 
 	double cash;
@@ -22,8 +27,27 @@ public class PlayerCurrency implements SerializableData<ACMWAccount>{
 	public static final String CURRENCY_PATH = "currency";
 	public static final String CAUSE_PATH = "cause";
 	
-	public List<EcoCause> getCauses(){
-		return cause;
+	public Set<EcoCause> getCauses(){
+		return new HashSet<>(cause);
+	}
+	
+	public EconomyResponse disposit(EcoCause cause) {
+		if(cash < cause.getAmount()) {
+			return new EconomyResponse(cause.getAmount(), cash, ResponseType.FAILURE, "Not enough cash");
+		}
+		cash = cash - cause.getAmount();
+		this.cause.add(cause);
+		return new EconomyResponse(cause.getAmount(), cash, ResponseType.SUCCESS, "");
+	}
+	
+	public EconomyResponse withdraw(EcoCause cause) {
+		cash = cash + cause.getAmount();
+		this.cause.add(cause);
+		return new EconomyResponse(cause.getAmount(), cash, ResponseType.SUCCESS, "");
+	}
+	
+	public double getAmount() {
+		return cash;
 	}
 	
 	@Override

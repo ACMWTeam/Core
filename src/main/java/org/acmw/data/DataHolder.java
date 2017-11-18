@@ -24,8 +24,7 @@ public interface DataHolder {
 	public default <T extends CustomData<? extends DataHolder>> Optional<T> getFirstData(Class<T> type){
 		return (Optional<T>)getData().stream().filter(d -> type.isInstance(d)).findFirst();
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public default <H extends DataHolder, T extends CustomData<H>> CustomData<H> createData(Class<T> type, H holder, Object... parameters) throws InvalidCreateParameters {
 		try {
 			T crea = type.newInstance();
@@ -38,7 +37,6 @@ public interface DataHolder {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public default <H extends DataHolder, T extends SerializableData<? extends DataHolder>> SerializableData<H> loadData(Class<T> type, H holder, ConfigurationSection section) {
 		try {
 			T data = type.newInstance();
@@ -62,6 +60,11 @@ public interface DataHolder {
 		return this;
 	}
 	
+	public default DataHolder addData(CustomData<? extends DataHolder> data) {
+		getData().add(data);
+		return this;
+	}
+	
 	//removes custom data
 	//@DataHolder is for chaining
 	@SuppressWarnings("unchecked")
@@ -69,6 +72,11 @@ public interface DataHolder {
 		for(CustomData<? extends DataHolder> data2 : data) {
 			getData().remove(data2);
 		}
+		return this;
+	}
+	
+	public default DataHolder removeData(CustomData<? extends DataHolder> data) {
+		getData().remove(data);
 		return this;
 	}
 	

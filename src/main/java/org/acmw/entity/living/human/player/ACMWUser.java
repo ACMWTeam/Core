@@ -1,5 +1,6 @@
 package org.acmw.entity.living.human.player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.acmw.data.CustomData;
@@ -13,6 +14,8 @@ public class ACMWUser implements ACMWAccount {
 	
 	public ACMWUser(OfflinePlayer player) {
 		this.player = player;
+		this.data = new ArrayList<>();
+		load();
 	}
 	
 	@Override
