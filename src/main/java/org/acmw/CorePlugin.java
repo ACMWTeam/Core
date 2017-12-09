@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.acmw.entity.vehicle.ACMWVehicle;
+import org.acmw.inventory.custom.CustomInventory;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -13,6 +15,7 @@ public class CorePlugin extends JavaPlugin {
 	
 	static CorePlugin plugin;
 	List<ACMWVehicle<? extends Vehicle>> vehicles = new ArrayList<>();
+	List<CustomInventory> inventories = new ArrayList<>();
 	
 	public void onEnable() {
 		plugin = this;
@@ -25,6 +28,10 @@ public class CorePlugin extends JavaPlugin {
 	
 	public void register(ACMWVehicle<? extends Vehicle> vehicle) {
 		vehicles.add(vehicle);
+	}
+	
+	public void register(CustomInventory inventory) {
+		inventories.add(inventory);
 	}
 	
 	public double getSpeed(Vector vector) {
@@ -48,6 +55,14 @@ public class CorePlugin extends JavaPlugin {
 			return Optional.of((ACMWVehicle<T>)opVehicle.get());
 		}
 		return Optional.empty();
+	}
+	
+	public List<CustomInventory> getInventories(){
+		return inventories;
+	}
+	
+	public Optional<CustomInventory> getInventory(Inventory inventory){
+		return getInventories().stream().filter(i -> i.getRAWInventory().equals(inventory)).findAny();
 	}
 	
 }

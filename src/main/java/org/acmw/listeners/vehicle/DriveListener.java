@@ -3,6 +3,7 @@ package org.acmw.listeners.vehicle;
 import java.util.Optional;
 
 import org.acmw.CorePlugin;
+import org.acmw.entity.vehicle.ACMWDrivable;
 import org.acmw.entity.vehicle.ACMWVehicle;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,7 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.util.Vector;
 
-public class VehicleListener implements Listener {
+public class DriveListener implements Listener {
 	
 	public void onVehicleMove(VehicleMoveEvent event) {
 		Optional<ACMWVehicle<Vehicle>> opVehicle = CorePlugin.getPlugin().getVehicle(event.getVehicle());
@@ -19,6 +20,9 @@ public class VehicleListener implements Listener {
 			return;
 		}
 		ACMWVehicle<Vehicle> vehicle = opVehicle.get();
+		if(!(vehicle instanceof ACMWDrivable)) {
+			return;
+		}
 		Block block = vehicle.getEntity().getLocation().getBlock().getRelative((int)vehicle.getEntity().getVelocity().getX(), (int)vehicle.getEntity().getVelocity().getY(), (int)vehicle.getEntity().getVelocity().getZ());
 		if(vehicle.getSpeed() > vehicle.getMaxSpeed()) {
 			Vector vector = vehicle.getEntity().getVelocity();

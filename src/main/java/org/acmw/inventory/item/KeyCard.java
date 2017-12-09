@@ -20,6 +20,7 @@ public class KeyCard implements DataHolder {
 	public KeyCard(String id, RankedPermission permission) {
 		this.permission = permission;
 		this.id = id;
+		//create itemstack: requires new materials API
 	}
 	
 	public String getID() {

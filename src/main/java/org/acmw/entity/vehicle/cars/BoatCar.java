@@ -3,7 +3,6 @@ package org.acmw.entity.vehicle.cars;
 import java.util.Optional;
 
 import org.acmw.entity.living.human.player.ACMWUser;
-import org.acmw.entity.vehicle.ACMWCar;
 import org.bukkit.entity.Boat;
 
 public class BoatCar implements ACMWCar <Boat>{

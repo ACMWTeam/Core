@@ -8,6 +8,7 @@ public class ZeroPickupItem implements ACMWItem {
 	
 	public ZeroPickupItem(Item item) {
 		this.item = item;
+		item.setPickupDelay(-1);
 	}
 	
 	@Override
